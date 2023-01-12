@@ -1,0 +1,1 @@
+This is a fs write method. Now this is string appended using append method.
