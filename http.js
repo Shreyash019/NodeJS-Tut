@@ -1,13 +1,22 @@
 const http = require('http');
+const fs = require('fs');
 
-// // (1) Simple Text Response
+// // (1) Sending Normal text as response
 // const server = http.createServer((request, response)=>{
 //     response.writeHead(200, {'Content-Type': 'text/html'})
 //     response.write('Hello');
 //     response.end();
 // })
 
-// // (2) JSON object response Response
+// // (2) Sending array
+// const server = http.createServer((req, res)=>{
+//     res.writeHead(200, {'content-type': 'text/json'});
+//     const arr = [1,2,3,4]
+//     console.log(arr)
+//     res.end(arr.toString());
+// })
+
+// // (3) Sending JSON object as response
 // const server = http.createServer((req, res)=>{
 //     res.writeHead(200, {'content-type': 'text/json'});
 //     const jsonObj = JSON.stringify({
@@ -17,14 +26,14 @@ const http = require('http');
 //     res.end(jsonObj);
 // })
 
-// // (3) HTML element Response
+// // (4) Sending HTML element as response
 // const server = http.createServer((req, res)=>{
 //     res.writeHead(200, { 'content-type': 'text/html'})
 //     res.write('<h1>Hello world')
 //     res.end()
 // });
 
-// // (4) HTML page Response
+// // (5) Sending HTML page as response
 // const server = http.createServer((req, res)=>{
 //     res.writeHead(200, {'Content-Type': 'text/html'});
 //     const body = `<!DOCTYPE html>
@@ -41,22 +50,40 @@ const http = require('http');
 //     res.end(body)
 // })
 
-// (5) Response to different URLs
+// // (6) Sending response as per differnt url request
+// const server = http.createServer((req, res)=>{
+//     res.writeHead(200, {'Content-Type': 'text/html'});
+//     console.log(req.url)
+//     if(req.url === '/'){
+//         res.write('Welcome to Home page.')
+//         res.end()
+//     } else if(req.url === '/about'){
+//         res.write('Welcome to about page.')
+//         res.end()
+//     } else {
+//         res.write('OOPs wrong URL request...')
+//         res.end()
+//     }
+// });
+
+
+// (7) Sending File Content in response
 const server = http.createServer((req, res)=>{
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    console.log(req.url)
-    if(req.url === '/'){
-        res.write('Welcome to Home page.')
-        res.end()
-    } else if(req.url === '/about'){
-        res.write('Welcome to about page.')
-        res.end()
-    } else {
-        res.write('OOPs wrong URL request...')
-        res.end()
-    }
+    res.writeHead(200, {'content-type': 'text/json'});
+    const readFile = fs.readFile('./TestFiles/copyFileAsync.txt', (err, data)=>{
+        if(err) console.log(err);
+        return data;
+    });
+    console.log(readFile)
+    res.end(readFile);
 })
 
+
+// (8) Sending response by creating stream pipe
+// const server = http.createServer((req, res)=>{
+//     const readableStream = fs.createReadStream('./TestFiles/openFile.txt');
+//     readableStream.pipe(res);
+// })
 
 
 const port = 5000;
